@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils import timezone
-
+from django.contrib.auth.models import User
 
 class Project(models.Model):
     name = models.CharField(
@@ -30,6 +30,7 @@ class Project(models.Model):
         verbose_name='Deleted',
         default=False, null=False
     )
+    # users = models.ManyToMany(User, related_name='projects', blank=True, through=User,)
 
 
     def delete(self, using=None, keep_parents=False):

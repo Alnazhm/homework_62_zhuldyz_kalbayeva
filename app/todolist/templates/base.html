@@ -36,7 +36,14 @@
 
              <li class="nav-item active "><a class="nav-link btn btn-info" style="margin-top: 7px; margin-bottom: 5px;" href="{% url 'login' %}" role="button">Sign In<span class="sr-only">(current)</span></a></li>
 
-        {% endif %}
+
+        <li class="nav-item active ">
+                   <a class="nav-link"><form action="{% url 'register' %}" method="post">
+                        {% csrf_token %}
+                        <input class= "btn btn-info" type="submit" value="Authorization">
+                    </form><span class="sr-only">(current)</span></a>
+                </li>
+{% endif %}
     </ul>
   </div>
 </nav>
