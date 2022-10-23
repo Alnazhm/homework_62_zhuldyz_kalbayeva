@@ -1,0 +1,16 @@
+{% extends 'base.html'%}
+{% block content %}
+    <div class="container">
+        <div class="box">
+            <div class="head_text heading text-center">
+                <p class="main-title-home">Create a new task</p>
+            </div>
+           <form action="" method="POST">
+               {% csrf_token%}
+               <div class="form">
+                    {% include 'partials/task_form.html' with button_text='Add task' %}
+               </div>
+           </form>
+        </div>
+    </div>
+{% endblock %}

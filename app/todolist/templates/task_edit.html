@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}
+    Edit task
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="box">
+            <div class="head_text heading text-left">
+                <p class="main-title-home">To do task edit</p>
+            </div>
+           <form action="{% url 'edit_task' todo_task.pk %}" method="POST">
+               {% csrf_token%}
+               <div class="form">
+                   {% include 'partials/task_form.html' with button_text='Update Task' %}
+               </div>
+           </form>
+        </div>
+    </div>
+{% endblock %}

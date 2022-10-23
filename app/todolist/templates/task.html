@@ -1,0 +1,10 @@
+{% extends 'base.html'%}
+{% block content%}
+<p>Summary - {{todo_task.summary}}</p>
+<p>Description - {{todo_task.description}}</p>
+<p>Status of task  -  {{todo_task.status}}</p>
+    {%for type in todo_task.type.all %}
+    <p>Type of task - {{type.name}}</p>
+      {%if not forloop.last%}
+      {% endif %}{% endfor %}
+{% endblock%}

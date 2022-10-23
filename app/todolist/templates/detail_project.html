@@ -1,0 +1,47 @@
+{% extends 'base.html'%}
+{% block content%}
+<p>Name - {{project.name}}</p>
+<p>Description - {{project.description}}</p>
+    <a class="card-link" href="{% url 'task_add' project.pk %}">
+        <button class="btn btn-success"><i class="glyphicon glyphicon-list-alt"></i>Add Task</button>
+    </a>
+    {%for todo_task in todo_tasks%}
+        <div class="container">
+  <div class="row">
+    <div class="col-12">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">Task Name</th>
+            <th scope="col">Task description</th>
+              <th scope="col">Task type</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ todo_task.summary }}</td>
+            <td>{{todo_task.description}}</td>
+              {%for type in todo_task.type.all %}
+                <td>{{type.name}}</td>
+                {%if not forloop.last%}
+                    {% endif %}{% endfor %}
+            <td>
+               <a class="card-link" href="{% url 'task_detail' todo_task.pk %}">
+                 <button class="btn btn-primary"><i class="glyphicon glyphicon-list-alt"></i></button>
+               </a>
+                <a class="card-link" href="{% url 'edit_task' todo_task.pk %}">
+              <button class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></button>
+                </a>
+                <a class="card-link" href="{% url 'confirm_delete' todo_task.pk %}" >
+                <button type="button" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></button>
+                </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+    {% endfor %}
+{% endblock%}

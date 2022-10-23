@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}
+Confirm delete
+{% endblock %}
+{% block content %}
+<h5 style="color: red;">Are you sure to delete project?</h5>
+<form action="" method="POST">
+{% csrf_token %}
+    <div class="btn-group ms-5" role="group" aria-label="Basic example">
+      <button type="submit" class="btn btn-primary">Yes</button>
+      <a href="{% url 'index' %}" class="btn btn-info" role="button">No</a>
+    </div>
+</form>
+{% endblock %}
