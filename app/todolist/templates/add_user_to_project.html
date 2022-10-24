@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}
+    Add User to Project
+{% endblock %}
+{% block content %}
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div class="form">
+            {% include 'partials/project_form.html' with main_title='PROJECT USERS' button_text='Принять' %}
+        </div>
+
+    </form>
+{% endblock %}

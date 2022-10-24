@@ -1,4 +1,5 @@
 import re
+from django.contrib.auth.models import User
 from todolist.models.statuses import Status
 from todolist.models.types import Type
 from todolist.models.tasks import Tasks
@@ -53,5 +54,15 @@ class ProjectForm(forms.ModelForm):
 
             }
 
+class AddUserToProjectForm(forms.ModelForm):
+    users = forms.ModelMultipleChoiceField(
+        label='Users',
+        queryset=User.objects.all(),
+        widget=forms.CheckboxSelectMultiple
+    )
+
+    class Meta:
+        model = Project
+        fields = ('users',)
 
 

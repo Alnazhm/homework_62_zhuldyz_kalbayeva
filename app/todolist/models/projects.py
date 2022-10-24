@@ -30,10 +30,16 @@ class Project(models.Model):
         verbose_name='Deleted',
         default=False, null=False
     )
-    # users = models.ManyToMany(User, related_name='projects', blank=True, through=User,)
+    users = models.ManyToManyField(
+        User,
+        related_name='projects',
+        blank=True
+        )
 
 
     def delete(self, using=None, keep_parents=False):
         self.deleted_at = timezone.now()
         self.is_deleted = True
         self.save()
+
+
