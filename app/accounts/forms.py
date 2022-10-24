@@ -17,7 +17,11 @@ def first_name_not_null(value):
 class CustomUserCreationForm(forms.ModelForm):
     password = forms.CharField(label='Password', strip=False, required=True, widget=forms.PasswordInput)
     password_confirm = forms.CharField(label='Password confirmation', strip=False, required=True, widget=forms.PasswordInput)
-    first_name = forms.CharField(label='First Name', validators=[first_name_not_null])
+    first_name = forms.CharField(label='First Name', validators=(first_name_not_null,))
+    email = forms.EmailField(
+        label='Email',
+        required=True
+    )
 
     class Meta:
         model = User
