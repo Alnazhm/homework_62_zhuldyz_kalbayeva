@@ -1,36 +1,16 @@
 {% extends 'base.html' %}
-{% block content %}
-<div class="container">
-    <form action="{% url 'register' %}" method="post" class="text-center">
-        {% csrf_token %}
-<!--        {% if has_error %}-->
-<!--            <p class="form-error">Username or passowrd invalid</p>-->
-<!--        {% endif %}-->
-        <div class="form-group">
-            <label for="username" class="form-label">Username</label>
-            <input type="text" name="username" id="username">
-        </div>
-        <div class="form-group">
-            <label for="first_name" class="form-label">First Name</label>
-            <input type="first_name" name="first_name" id="first_name">
-        </div>
-        <div class="form-group">
-            <label for="last_name" class="form-label">Last Name</label>
-            <input type="last_name" name="last_name" id="last_name">
-        </div>
-         <div class="form-group">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" name="email" id="email">
-        </div>
-        <div class="form-group">
-            <label for="password" class="form-label">Password</label>
-            <input type="password" name="password" id="password">
-        </div>
-      <div class="form-group">
-            <label for="password_confirm" class="form-label">Password confirmation</label>
-            <input type="text" name="password_confirm" id="password_confirm">
-        </div>
-        <button type="submit">Register</button>
-    </form>
-</div>
+{% block title %}
+    Authorization
 {% endblock %}
+{% block content %}
+    <form action="" method="POST">
+        {% csrf_token %}
+
+        <div class="form">
+            {% include 'partials/task_form.html' with main_title='Authorization' button_text='Authorization' %}
+        </div>
+
+
+    </form>
+{% endblock %}
+
