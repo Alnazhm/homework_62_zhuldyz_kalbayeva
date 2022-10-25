@@ -22,7 +22,8 @@
         <li class="nav-item active ">
         <a class="nav-link text-white" href="{% url 'index_tasks' %}">All tasks<span class="sr-only">(current)</span></a>
       </li>
-        {% if user.is_authenticated %}
+        {% if user.is_authenticated and perms.todolist.add_project%}
+
         <li class="nav-item active ">
         <a class="nav-link text-white" href="{% url 'add_project' %}">Add project<span class="sr-only">(current)</span></a>
       </li>
