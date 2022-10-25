@@ -3,14 +3,14 @@
     Authorization
 {% endblock %}
 {% block content %}
+<div class="container justify-content-center">
     <form action="" method="POST">
         {% csrf_token %}
-
         <div class="form">
             {% include 'partials/task_form.html' with main_title='Authorization' button_text='Authorization' %}
         </div>
-
-
     </form>
+</div>
+
 {% endblock %}
 

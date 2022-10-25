@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse, reverse_lazy
 from django.views.generic import DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from todolist.models import Project, Tasks
-from todolist.forms import ProjectForm,AddUserToProjectForm
+from todolist.forms import ProjectForm, AddUserToProjectForm
 from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from django.core.exceptions import PermissionDenied
@@ -29,7 +29,7 @@ class ProjectAddView(GroupPermission, LoginRequiredMixin, CreateView):
     template_name = 'add_project.html'
     form_class = ProjectForm
     model = Project
-    groups = ['Project Manager']
+    groups = ['Project Manager', 'admin']
 
     def get_success_url(self):
         return reverse('detail_project', kwargs={'pk': self.object.pk})
@@ -40,7 +40,7 @@ class ProjectEditView(GroupPermission, LoginRequiredMixin, UpdateView):
     form_class = ProjectForm
     model = Project
     context_object_name = 'project'
-    groups = ['Project Manager']
+    groups = ['Project Manager', 'admin']
 
     def get_success_url(self):
         return reverse('detail_project', kwargs={'pk': self.object.pk})
@@ -50,12 +50,13 @@ class ProjectDeleteView(GroupPermission, LoginRequiredMixin, DeleteView):
     template_name = 'confirm_delete_project.html'
     model = Project
     success_url = reverse_lazy('index')
-    groups = ['Project Manager']
+    groups = ['Project Manager', 'admin']
+
 
 class AddUserToProjectView(GroupPermission, TemplateView):
     template_name = 'add_user_to_project.html'
     model = Project
-    groups = ['Project Manager', 'Team Lead']
+    groups = ['Project Manager', 'Team Lead', 'admin']
 
     def post(self, request, *args, **kwargs):
         self.form = AddUserToProjectForm(self.request.POST)
@@ -69,9 +70,11 @@ class AddUserToProjectView(GroupPermission, TemplateView):
 
     def dispatch(self, request, *args, **kwargs):
         project = Project.objects.get(pk=self.kwargs.get('pk'))
-        if request.user not in project.users.all():
+        if request.user not in project.users.all() and request.user.username != 'root':
             raise PermissionDenied
         return super().dispatch(request, *args, **kwargs)
+
+
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
@@ -83,7 +86,7 @@ class ProjectUsersUpdateView(GroupPermission, LoginRequiredMixin, UpdateView):
     form_class = AddUserToProjectForm
     template_name = 'add_user_to_project.html'
     success_url = '/'
-    groups = ['Project Manager', 'Team Lead']
+    groups = ['Project Manager', 'Team Lead', 'admin']
 
     def get_success_url(self):
         return reverse('detail_project', kwargs={'pk': self.object.pk})

@@ -10,9 +10,9 @@
 
 <div class="row">
     {% if user.is_authenticated %}
-         {% if  perms.todolist.add_tasks %}
-                {% for user in project.users.all  %}
-                    {% if user.username == request.user.username  %}
+         {% if perms.todolist.add_tasks or request.user.is_superuser %}
+                {% for user in project.users.all|slice:":1"  %}
+                    {% if user.username == request.user.username or request.user.is_superuser %}
                     <div class="col-2 text-center">
                         <a href="{% url 'task_add' project.pk %}">
                             <button type="submit" class="btn btn-primary btn-block">Add Task</button>
@@ -21,21 +21,35 @@
                     {% endif %}
                 {% endfor %}
          {% endif %}
-
-            {% for group in request.user.groups.all  %}
-                {% if group.name != 'Developer' %}
-                    {% for user in project.users.all  %}
-                        {% if user.username == request.user.username  %}
-                        <div class="col-2 text-center">
-                            <a href="{% url 'add_user_to_project' project.pk %}">
-                                <button type="submit" class="btn btn-primary btn-block">Add User</button>
-                            </a>
-                        </div>
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
-            {% endfor %}
-           {% for group in request.user.groups.all  %}
+            {% if request.user.is_superuser %}
+                <div class="col-2 text-center">
+                    <a href="{% url 'add_user_to_project' project.pk %}">
+                        <button type="submit" class="btn btn-primary btn-block">Add User</button>
+                    </a>
+                </div>
+            {% else %}
+                {% for group in request.user.groups.all  %}
+                    {% if group.name != 'Developer' %}
+                        {% for user in project.users.all  %}
+                            {% if user.username == request.user.username  %}
+                            <div class="col-2 text-center">
+                                <a href="{% url 'add_user_to_project' project.pk %}">
+                                    <button type="submit" class="btn btn-primary btn-block">Add User</button>
+                                </a>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            {% if request.user.is_superuser %}
+                <div class="col-2 text-center">
+                    <a href="{% url 'delete_user_from_project' project.pk %}">
+                        <button type="submit" class="btn btn-primary btn-block">Delete User</button>
+                    </a>
+                </div>
+            {%else%}
+                   {% for group in request.user.groups.all  %}
                         {% if group.name != 'Developer' %}
                             {% for user in project.users.all  %}
                                 {% if user.username == request.user.username  %}
@@ -47,11 +61,12 @@
                                 {% endif %}
                             {% endfor %}
                         {% endif %}
-            {% endfor %}
+                    {% endfor %}
+            {%endif%}
     {% endif %}
 </div>
 
-    {%for todo_task in todo_tasks%}
+{%for todo_task in todo_tasks%}
 <div class="container">
   <div class="row">
     <div class="col-12">
@@ -79,19 +94,27 @@
                 <a class="card-link" href="{% url 'edit_task' todo_task.pk %}">
               <button class="btn btn-warning"><i class="glyphicon glyphicon-pencil"></i></button>
                 </a>
-                {% for group in request.user.groups.all  %}
-                    {% if group.name != 'Developer' %}
-                        {% for user in project.users.all  %}
-                            {% if user.username == request.user.username  %}
-                                <a class="card-link" href="{% url 'confirm_delete' todo_task.pk %}" >
-                                <button type="button" class="btn btn-danger">
-                                    <i class="glyphicon glyphicon-trash"></i>
-                                </button>
-                                </a>
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                {% endfor %}
+                {% if request.user.is_superuser %}
+                    <a class="card-link" href="{% url 'confirm_delete' todo_task.pk %}" >
+                            <button type="button" class="btn btn-danger">
+                                <i class="glyphicon glyphicon-trash"></i>
+                            </button>
+                        </a>
+                {% else %}
+                    {% for group in request.user.groups.all  %}
+                        {% if group.name != 'Developer' %}
+                            {% for user in project.users.all  %}
+                                {% if user.username == request.user.username  %}
+                                    <a class="card-link" href="{% url 'confirm_delete' todo_task.pk %}" >
+                                    <button type="button" class="btn btn-danger">
+                                        <i class="glyphicon glyphicon-trash"></i>
+                                    </button>
+                                    </a>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
             </td>
           </tr>
         </tbody>
